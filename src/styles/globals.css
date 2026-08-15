@@ -1,0 +1,272 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* ===== Markdown 预览区样式（接近 Typora 风格）===== */
+.markdown-body {
+  @apply text-[15px] leading-7;
+}
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  @apply mt-6 mb-3 font-semibold text-foreground leading-tight scroll-mt-8;
+}
+.markdown-body h1 {
+  @apply text-3xl mt-8 border-b pb-2;
+}
+.markdown-body h2 {
+  @apply text-2xl mt-8 border-b pb-2;
+}
+.markdown-body h3 {
+  @apply text-xl;
+}
+.markdown-body h4 {
+  @apply text-lg;
+}
+.markdown-body p {
+  @apply my-3;
+}
+.markdown-body a {
+  @apply text-blue-600 dark:text-blue-400 underline underline-offset-2;
+}
+.markdown-body ul {
+  @apply list-disc pl-6 my-3;
+}
+.markdown-body ol {
+  @apply list-decimal pl-6 my-3;
+}
+.markdown-body li {
+  @apply my-1;
+}
+.markdown-body li > ul,
+.markdown-body li > ol {
+  @apply my-1;
+}
+.markdown-body blockquote {
+  @apply border-l-4 border-muted pl-4 my-4 text-muted-foreground italic;
+}
+.markdown-body code {
+  @apply bg-muted rounded px-1.5 py-0.5 text-[13px] font-mono;
+}
+.markdown-body pre {
+  @apply bg-muted rounded-lg p-4 my-4 overflow-x-auto text-[13px] leading-6;
+}
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+.markdown-body table {
+  @apply w-full my-4 text-sm border-collapse;
+}
+.markdown-body th,
+.markdown-body td {
+  @apply border px-3 py-2 text-left;
+}
+.markdown-body th {
+  @apply bg-muted font-semibold;
+}
+.markdown-body img {
+  @apply max-w-full rounded my-4;
+}
+.markdown-body hr {
+  @apply my-6 border-muted;
+}
+.markdown-body input[type="checkbox"] {
+  @apply mr-2 align-middle;
+}
+.markdown-body .task-list-item {
+  @apply list-none -ml-5;
+}
+.markdown-body .katex-display {
+  @apply my-4 overflow-x-auto;
+}
+
+/* highlight.js 行号/主题变量 */
+.markdown-body pre code.hljs {
+  @apply p-0 bg-transparent;
+}
+
+/* ===== 代码高亮 token 颜色（亮色）===== */
+.markdown-body .hljs-comment,
+.markdown-body .hljs-quote {
+  color: #64748b;
+  font-style: italic;
+}
+.markdown-body .hljs-keyword,
+.markdown-body .hljs-selector-tag,
+.markdown-body .hljs-subst {
+  color: #7c3aed;
+}
+.markdown-body .hljs-number,
+.markdown-body .hljs-literal,
+.markdown-body .hljs-variable,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-tag .hljs-attr {
+  color: #d97706;
+}
+.markdown-body .hljs-string,
+.markdown-body .hljs-doctag {
+  color: #059669;
+}
+.markdown-body .hljs-title,
+.markdown-body .hljs-section,
+.markdown-body .hljs-selector-id {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+.markdown-body .hljs-type,
+.markdown-body .hljs-class .hljs-title {
+  color: #b91c1c;
+}
+.markdown-body .hljs-tag,
+.markdown-body .hljs-name,
+.markdown-body .hljs-attribute {
+  color: #b45309;
+}
+.markdown-body .hljs-regexp,
+.markdown-body .hljs-link {
+  color: #be185d;
+}
+.markdown-body .hljs-symbol,
+.markdown-body .hljs-bullet {
+  color: #0d9488;
+}
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-builtin-name {
+  color: #0891b2;
+}
+.markdown-body .hljs-meta {
+  color: #6b7280;
+}
+.markdown-body .hljs-deletion {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.markdown-body .hljs-addition {
+  background: #d1fae5;
+  color: #065f46;
+}
+.markdown-body .hljs-emphasis {
+  font-style: italic;
+}
+.markdown-body .hljs-strong {
+  font-weight: 700;
+}
+
+/* ===== 代码高亮 token 颜色（暗色）===== */
+.dark .markdown-body .hljs-comment,
+.dark .markdown-body .hljs-quote {
+  color: #94a3b8;
+}
+.dark .markdown-body .hljs-keyword,
+.dark .markdown-body .hljs-selector-tag,
+.dark .markdown-body .hljs-subst {
+  color: #c4b5fd;
+}
+.dark .markdown-body .hljs-number,
+.dark .markdown-body .hljs-literal,
+.dark .markdown-body .hljs-variable,
+.dark .markdown-body .hljs-template-variable,
+.dark .markdown-body .hljs-tag .hljs-attr {
+  color: #fbbf24;
+}
+.dark .markdown-body .hljs-string,
+.dark .markdown-body .hljs-doctag {
+  color: #34d399;
+}
+.dark .markdown-body .hljs-title,
+.dark .markdown-body .hljs-section,
+.dark .markdown-body .hljs-selector-id {
+  color: #93c5fd;
+}
+.dark .markdown-body .hljs-type,
+.dark .markdown-body .hljs-class .hljs-title {
+  color: #fca5a5;
+}
+.dark .markdown-body .hljs-tag,
+.dark .markdown-body .hljs-name,
+.dark .markdown-body .hljs-attribute {
+  color: #fcd34d;
+}
+.dark .markdown-body .hljs-regexp,
+.dark .markdown-body .hljs-link {
+  color: #f9a8d4;
+}
+.dark .markdown-body .hljs-symbol,
+.dark .markdown-body .hljs-bullet {
+  color: #5eead4;
+}
+.dark .markdown-body .hljs-built_in,
+.dark .markdown-body .hljs-builtin-name {
+  color: #67e8f9;
+}
+.dark .markdown-body .hljs-meta {
+  color: #94a3b8;
+}
+.dark .markdown-body .hljs-deletion {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+.dark .markdown-body .hljs-addition {
+  background: #064e3b;
+  color: #a7f3d0;
+}
