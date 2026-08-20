@@ -11,6 +11,7 @@ import { TOC } from "@/components/TOC/TOC";
 import { useEditorStore } from "@/store/editorStore";
 import { useTheme } from "@/hooks/useTheme";
 import { useAutoSave, readAutosave } from "@/hooks/useAutoSave";
+import { useSyncScroll } from "@/hooks/useSyncScroll";
 import { cn } from "@/lib/utils";
 
 /**
@@ -27,6 +28,10 @@ export function App() {
   const [tocOpen, setTocOpen] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const editorScrollRef = useRef<HTMLDivElement>(null);
+  const previewScrollRef = useRef<HTMLDivElement>(null);
+
+  useSyncScroll(editorScrollRef, previewScrollRef);
 
   const newFile = useEditorStore((s) => s.newFile);
   const openFile = useEditorStore((s) => s.openFile);
@@ -34,6 +39,7 @@ export function App() {
   const exportHtml = useEditorStore((s) => s.exportHtml);
   const restoreFromAutosave = useEditorStore((s) => s.restoreFromAutosave);
   const theme = useEditorStore((s) => s.theme);
+  const editorVisible = useEditorStore((s) => s.editorVisible);
 
   // 启动时检测自动保存内容
   useEffect(() => {
@@ -97,22 +103,26 @@ export function App() {
 
       <div ref={containerRef} className="flex flex-1 min-h-0">
         {/* 编辑区 */}
-        <div
-          style={{ width: `${split}%` }}
-          className="min-w-0 shrink-0 bg-background"
-        >
-          <Editor />
-        </div>
+        {editorVisible && (
+          <>
+            <div
+              style={{ width: `${split}%` }}
+              className="min-w-0 shrink-0 bg-background"
+            >
+              <Editor scrollRef={editorScrollRef} />
+            </div>
 
-        {/* 拖拽分隔条 */}
-        <div
-          onMouseDown={startDrag}
-          className="w-1 shrink-0 cursor-col-resize bg-border transition-colors hover:bg-primary/40 active:bg-primary/60"
-        />
+            {/* 拖拽分隔条 */}
+            <div
+              onMouseDown={startDrag}
+              className="w-1 shrink-0 cursor-col-resize bg-border transition-colors hover:bg-primary/40 active:bg-primary/60"
+            />
+          </>
+        )}
 
         {/* 预览区 */}
         <div className="min-w-0 flex-1 bg-background">
-          <Preview />
+          <Preview scrollRef={previewScrollRef} />
         </div>
 
         {/* 目录大纲侧边栏 */}

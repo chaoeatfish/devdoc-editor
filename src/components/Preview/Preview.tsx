@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, ForwardedRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -39,9 +39,10 @@ function CodeBlock({
 interface PreviewProps {
   /** 直接指定渲染内容（用于导出等场景）；默认从 store 读取 */
   content?: string;
+  scrollRef?: ForwardedRef<HTMLDivElement>;
 }
 
-function PreviewInner({ content: externalContent }: PreviewProps) {
+function PreviewInner({ content: externalContent, scrollRef }: PreviewProps) {
   const storeContent = useEditorStore((state) => state.content);
   const raw = externalContent ?? storeContent;
 
@@ -53,7 +54,10 @@ function PreviewInner({ content: externalContent }: PreviewProps) {
   }, [raw]);
 
   return (
-    <div className="markdown-body h-full overflow-y-auto px-6 py-4">
+    <div
+      ref={scrollRef}
+      className="markdown-body h-full overflow-y-auto px-6 py-4"
+    >
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex, rehypeHighlight, rehypeSlug]}

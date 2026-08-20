@@ -13,6 +13,10 @@ interface EditorState {
   isDirty: boolean;
   /** 主题偏好 */
   theme: Theme;
+  /** 编辑器是否可见 */
+  editorVisible: boolean;
+  /** 同步滚动是否启用 */
+  syncScroll: boolean;
 
   setContent: (text: string) => void;
   setFilePath: (path: string | null) => void;
@@ -30,6 +34,10 @@ interface EditorState {
   restoreFromAutosave: (text: string) => void;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+  /** 切换编辑器可见性 */
+  toggleEditor: () => void;
+  /** 切换同步滚动 */
+  toggleSyncScroll: () => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -37,6 +45,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   filePath: null,
   isDirty: false,
   theme: "system",
+  editorVisible: true,
+  syncScroll: true,
 
   setContent: (text) => set({ content: text, isDirty: true }),
 
@@ -111,5 +121,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const next: Theme =
       theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
     set({ theme: next });
+  },
+
+  toggleEditor: () => {
+    const { editorVisible } = get();
+    set({ editorVisible: !editorVisible });
+  },
+
+  toggleSyncScroll: () => {
+    const { syncScroll } = get();
+    set({ syncScroll: !syncScroll });
   },
 }));

@@ -8,10 +8,14 @@ import {
   Sun,
   Moon,
   Monitor,
+  Link2,
+  Link2Off,
+  PanelLeftClose,
+  PanelLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** 顶部工具栏：新建 / 打开 / 保存 / 导出 HTML / 主题切换 */
+/** 顶部工具栏：新建 / 打开 / 保存 / 导出 HTML / 主题切换 / 同步滚动 / 编辑器显示 */
 export function Toolbar() {
   const newFile = useEditorStore((s) => s.newFile);
   const openFile = useEditorStore((s) => s.openFile);
@@ -19,6 +23,10 @@ export function Toolbar() {
   const exportHtml = useEditorStore((s) => s.exportHtml);
   const theme = useEditorStore((s) => s.theme);
   const toggleTheme = useEditorStore((s) => s.toggleTheme);
+  const syncScroll = useEditorStore((s) => s.syncScroll);
+  const toggleSyncScroll = useEditorStore((s) => s.toggleSyncScroll);
+  const editorVisible = useEditorStore((s) => s.editorVisible);
+  const toggleEditor = useEditorStore((s) => s.toggleEditor);
 
   const themeIcon =
     theme === "dark" ? <Sun /> : theme === "light" ? <Moon /> : <Monitor />;
@@ -73,6 +81,27 @@ export function Toolbar() {
       </Button>
 
       <div className="flex-1" />
+
+      <Button
+        variant="ghost"
+        size="sm"
+        title={editorVisible ? "隐藏编辑器" : "显示编辑器"}
+        onClick={toggleEditor}
+      >
+        {editorVisible ? <PanelLeftClose /> : <PanelLeft />}
+        {editorVisible ? "隐藏编辑器" : "显示编辑器"}
+      </Button>
+
+      <Button
+        variant={syncScroll ? "default" : "ghost"}
+        size="sm"
+        title={syncScroll ? "关闭同步滚动" : "开启同步滚动"}
+        onClick={toggleSyncScroll}
+        className={cn(!syncScroll && "text-muted-foreground")}
+      >
+        {syncScroll ? <Link2 /> : <Link2Off />}
+        同步滚动
+      </Button>
 
       <Button
         variant="ghost"

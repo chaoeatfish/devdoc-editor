@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import type { ForwardedRef } from "react";
 import { EditorView, keymap, lineNumbers } from "@codemirror/view";
 import {
   highlightActiveLine,
@@ -18,6 +19,12 @@ import {
 } from "@codemirror/language";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { useEditorStore } from "@/store/editorStore";
+import { Button } from "@/components/ui/button";
+import { EyeOff } from "lucide-react";
+
+interface EditorProps {
+  scrollRef?: ForwardedRef<HTMLDivElement>;
+}
 
 /**
  * Markdown 编辑器（CodeMirror 6）：
@@ -25,7 +32,7 @@ import { useEditorStore } from "@/store/editorStore";
  * - 与 Zustand store 双向绑定：编辑时更新 `content`，
  *   外部变更（打开/新建/恢复）时同步回编辑器。
  */
-export function Editor() {
+export function Editor({ scrollRef }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const themeCompartmentRef = useRef<Compartment | null>(null);
@@ -97,10 +104,27 @@ export function Editor() {
     });
   }, [theme]);
 
+  const toggleEditor = useEditorStore((state) => state.toggleEditor);
+
   return (
-    <div
-      ref={containerRef}
-      className="h-full w-full overflow-hidden [&_.cm-editor]:h-full [&_.cm-editor]:text-[14px]"
-    />
+    <div className="relative h-full w-full">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute right-2 top-2 z-10 h-7 w-7 opacity-70 hover:opacity-100"
+        onClick={toggleEditor}
+        title="隐藏编辑器"
+      >
+        <EyeOff className="h-4 w-4" />
+      </Button>
+      <div
+        ref={(node) => {
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          if (typeof scrollRef === "function") scrollRef(node);
+          else if (scrollRef) (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
+        className="h-full w-full overflow-hidden [&_.cm-editor]:h-full [&_.cm-editor]:text-[14px]"
+      />
+    </div>
   );
 }
