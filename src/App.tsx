@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Toaster } from "sonner";
 import { ListTree } from "lucide-react";
+import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 
 import { Toolbar } from "@/components/Toolbar/Toolbar";
 import { Editor } from "@/components/Editor/Editor";
@@ -35,6 +37,7 @@ export function App() {
 
   const newFile = useEditorStore((s) => s.newFile);
   const openFile = useEditorStore((s) => s.openFile);
+  const openFileFromPath = useEditorStore((s) => s.openFileFromPath);
   const saveFile = useEditorStore((s) => s.saveFile);
   const exportHtml = useEditorStore((s) => s.exportHtml);
   const restoreFromAutosave = useEditorStore((s) => s.restoreFromAutosave);
@@ -53,6 +56,23 @@ export function App() {
       cancelled = true;
     };
   }, [restoreFromAutosave]);
+
+  // 处理从资源管理器打开的文件（启动时 CLI 参数 / 第二实例事件）
+  useEffect(() => {
+    // 检查启动时是否有文件参数
+    invoke<string | null>("get_startup_file").then((path) => {
+      if (path) openFileFromPath(path);
+    });
+
+    // 监听从第二个实例传来的文件路径事件
+    const unlisten = listen<string>("open-file", (event) => {
+      openFileFromPath(event.payload);
+    });
+
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [openFileFromPath]);
 
   // 全局快捷键
   useHotkeys("ctrl+n, cmd+n", (e) => {

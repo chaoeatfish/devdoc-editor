@@ -117,3 +117,11 @@ pub fn clear_autosave(app: AppHandle) -> Result<(), String> {
     }
     Ok(())
 }
+
+/// 获取启动时通过命令行传入的文件路径（读取后清空，仅返回一次）。
+/// 用于处理用户从资源管理器双击 .md 文件打开应用的场景。
+#[tauri::command]
+pub fn get_startup_file() -> Option<String> {
+    let mut sf = crate::STARTUP_FILE.lock().ok()?;
+    sf.take()
+}

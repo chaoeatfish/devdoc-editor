@@ -24,6 +24,8 @@ interface EditorState {
   newFile: () => void;
   /** 打开文件对话框并加载内容 */
   openFile: () => Promise<void>;
+  /** 根据路径直接打开文件（用于从资源管理器打开的场景） */
+  openFileFromPath: (path: string) => Promise<void>;
   /** 保存（已有路径直接写，否则另存为） */
   saveFile: () => Promise<void>;
   /** 另存为 */
@@ -65,6 +67,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const [path, text] = result;
       set({ content: text, filePath: path, isDirty: false });
       toast.success("已打开文件");
+    } catch (error) {
+      toast.error(`打开文件失败：${error}`);
+    }
+  },
+
+  openFileFromPath: async (path) => {
+    try {
+      const text = await invoke<string>("read_file", { path });
+      set({ content: text, filePath: path, isDirty: false });
     } catch (error) {
       toast.error(`打开文件失败：${error}`);
     }
